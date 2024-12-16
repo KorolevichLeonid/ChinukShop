@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.kfnfnjlvdrngjrjkn.myshop">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:targetApi="31">
+        <activity
+            android:name=".Admin.AdminAddNewTrainerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Users.TrainingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Users.CartActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HuiActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Users.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Users.SettingsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Users.HomeActivity"
+            android:exported="true"
+            android:label="@string/title_activity_home"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Admin.AdminCategoryActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Admin.AdminAddNewProductActivity"
+            android:exported="true" />
+        <activity
+            android:name=".UI.ExitActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.RegistorActivity"
+            android:exported="true" />
+    </application>
+
+</manifest>

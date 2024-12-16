@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "241281835836",
+    "project_id": "myshop-c123a",
+    "storage_bucket": "myshop-c123a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:241281835836:android:8664f4cdb8578a632cb439",
+        "android_client_info": {
+          "package_name": "com.kfnfnjlvdrngjrjkn.myshop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCh-AGohmlVtVA9KheVPDtIONu7MZy_SOU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
