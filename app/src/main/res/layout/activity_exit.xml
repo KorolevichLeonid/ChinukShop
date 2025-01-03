@@ -33,7 +33,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <EditText
         android:id="@+id/user_login"
         android:layout_width="0dp"
@@ -81,8 +80,21 @@
         android:text="@string/remember_me"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toTopOf="@+id/exit_button"
-        app:layout_constraintStart_toStartOf="parent"
-         />
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/forgot_password"
+        android:layout_width="142dp"
+        android:layout_height="27dp"
+        android:layout_marginBottom="12dp"
+        android:text="Забыли пароль?"
+        android:textColor="@color/MainColor"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/remember_me_checkbox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.835"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/exit_button"

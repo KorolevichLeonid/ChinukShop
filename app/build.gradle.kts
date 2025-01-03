@@ -70,6 +70,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics") // Firebase Analytics
     implementation("com.google.firebase:firebase-auth") // Firebase Authentication
     implementation("com.google.firebase:firebase-storage") // Firebase Storage
+    implementation ("com.google.firebase:firebase-dynamic-links:XX.X.X")
     implementation(libs.firebase.database) // Firebase Database
     implementation(libs.lifecycle.runtime.ktx) // Lifecycle KTX
 

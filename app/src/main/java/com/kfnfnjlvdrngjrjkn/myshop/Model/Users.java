@@ -13,6 +13,7 @@ public class Users {
     private String bookingConfirmation;
     private List<String> cartItems;
     private String name;
+    private String email;
     private String address;
     private String image;
 
@@ -24,6 +25,9 @@ public class Users {
     // Геттеры и сеттеры для полей
     public String getPhone() {
         return phone;
+    }
+    public String getEmail() {
+        return email;
     }
 
     public void setPhone(String phone) {

@@ -1,4 +1,4 @@
-package com.kfnfnjlvdrngjrjkn.myshop.Users;
+package com.kfnfnjlvdrngjrjkn.myshop.UI;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,11 +16,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.kfnfnjlvdrngjrjkn.myshop.UI.ExitActivity;
 import com.kfnfnjlvdrngjrjkn.myshop.Model.Users;
 import com.kfnfnjlvdrngjrjkn.myshop.Prevalent.Prevalent;
 import com.kfnfnjlvdrngjrjkn.myshop.R;
-import com.kfnfnjlvdrngjrjkn.myshop.UI.RegistorActivity;
+import com.kfnfnjlvdrngjrjkn.myshop.Users.HomeActivity;
 
 import io.paperdb.Paper;
 

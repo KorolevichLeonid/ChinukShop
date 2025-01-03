@@ -2,7 +2,6 @@ package com.kfnfnjlvdrngjrjkn.myshop.Users;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,7 +33,7 @@ import com.kfnfnjlvdrngjrjkn.myshop.Model.Product;
 import com.kfnfnjlvdrngjrjkn.myshop.Model.Users;
 import com.kfnfnjlvdrngjrjkn.myshop.Prevalent.Prevalent;
 import com.kfnfnjlvdrngjrjkn.myshop.R;
-import com.kfnfnjlvdrngjrjkn.myshop.UI.ExitActivity;
+import com.kfnfnjlvdrngjrjkn.myshop.UI.MainActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

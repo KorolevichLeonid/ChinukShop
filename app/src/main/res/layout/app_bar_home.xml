@@ -30,6 +30,6 @@
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="16dp"
         app:srcCompat="@drawable/nav_cart"
-        android:contentDescription="Добавить в корзину" /> <!-- Добавлено описание -->
+        android:contentDescription="Добавить в корзину" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

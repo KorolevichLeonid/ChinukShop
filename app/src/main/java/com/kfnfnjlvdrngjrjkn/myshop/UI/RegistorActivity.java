@@ -14,120 +14,109 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.kfnfnjlvdrngjrjkn.myshop.R;
 
 import java.util.HashMap;
 
 public class RegistorActivity extends AppCompatActivity {
     private Button registorButton;
-    private EditText userTextName, userTextSurname, userTextLogin, userTextPassword;
+    private EditText userTextName, userTextSurname, userTextPhone, userTextPassword, userTextEmail;
     private ProgressBar progressBar;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registor);
 
-
         registorButton = findViewById(R.id.register_button);
         userTextName = findViewById(R.id.user_name);
         userTextSurname = findViewById(R.id.user_surname);
-        userTextLogin = findViewById(R.id.user_login);
+        userTextPhone = findViewById(R.id.user_phone);
         userTextPassword = findViewById(R.id.user_password);
+        userTextEmail = findViewById(R.id.user_email);
         progressBar = findViewById(R.id.progress_bar);
 
         progressBar.setVisibility(View.GONE);
+        mAuth = FirebaseAuth.getInstance();
 
-
-        registorButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CreateAccount();
-            }
-        });
+        registorButton.setOnClickListener(v -> createAccount());
     }
 
-    private void CreateAccount() {
+    private void createAccount() {
         // Получение введенных данных
-        String userName = userTextName.getText().toString();
-        String userSurname = userTextSurname.getText().toString();
-        String userLogin = userTextLogin.getText().toString();
-        String userPassword = userTextPassword.getText().toString();
+        String userName = userTextName.getText().toString().trim();
+        String userSurname = userTextSurname.getText().toString().trim();
+        String userPhone = userTextPhone.getText().toString().trim();
+        String userPassword = userTextPassword.getText().toString().trim();
+        String userEmail = userTextEmail.getText().toString().trim();
 
-
+        // Проверка на пустые поля
         if (TextUtils.isEmpty(userName)) {
-            Toast.makeText(this, "Enter Name", Toast.LENGTH_SHORT).show();
+            showToast("Введите имя");
             return;
-        } else if (TextUtils.isEmpty(userSurname)) {
-            Toast.makeText(this, "Enter Surname", Toast.LENGTH_SHORT).show();
-            return;
-        } else if (TextUtils.isEmpty(userLogin)) {
-            Toast.makeText(this, "Enter Login", Toast.LENGTH_SHORT).show();
-            return;
-        } else if (TextUtils.isEmpty(userPassword)) {
-            Toast.makeText(this, "Enter Password", Toast.LENGTH_SHORT).show();
-            return;
-        } else {
-            progressBar.setVisibility(View.VISIBLE); // Показать прогресс-бар во время валидации
-            ValidatePhone(userName, userSurname, userLogin, userPassword); // Валидация телефона
         }
+        if (TextUtils.isEmpty(userSurname)) {
+            showToast("Введите фамилию");
+            return;
+        }
+        if (TextUtils.isEmpty(userPhone)) {
+            showToast("Введите номер телефона");
+            return;
+        }
+        if (TextUtils.isEmpty(userPassword)) {
+            showToast("Введите пароль");
+            return;
+        }
+        if (TextUtils.isEmpty(userEmail)) {
+            showToast("Введите email");
+            return;
+        }
+
+        progressBar.setVisibility(View.VISIBLE);
+        // Аутентификация пользователя
+        mAuth.createUserWithEmailAndPassword(userEmail, userPassword)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Получаем текущего пользователя
+                        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                        String userId = firebaseUser.getUid();
+                        saveUserData(userId, userName, userSurname, userPhone, userEmail);
+                    } else {
+                        progressBar.setVisibility(View.GONE);
+                        showToast("Ошибка при регистрации: " + task.getException().getMessage());
+                    }
+                });
     }
 
-    private void ValidatePhone(String username, String surname, String phone, String password) {
-        final DatabaseReference RootRef; // Ссылка на корень базы данных
+    private void saveUserData(String userId, String username, String surname, String phone, String email) {
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
 
-        // Получение ссылки на корень базы данных Firebase
-        RootRef = FirebaseDatabase.getInstance().getReference();
+        HashMap<String, Object> usersDataMap = new HashMap<>();
+        usersDataMap.put("userId", userId);
+        usersDataMap.put("name", username);
+        usersDataMap.put("surname", surname);
+        usersDataMap.put("phone", phone); // Сохраняем номер телефона
+        usersDataMap.put("email", email); // Сохраняем адрес электронной почты
 
-        // Создание слушателя для получения данных только один раз
-        RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // Проверка, существует ли пользователь с таким номером телефона
-                if (!(dataSnapshot.child("Users").child(phone).exists())) {
-                    // Если пользователя нет, создаем новый аккаунт
-                    HashMap<String, Object> usersDataMap = new HashMap<>();
-                    usersDataMap.put("phone", phone); // Добавляем номер телефона
-                    usersDataMap.put("name", username); // Добавляем имя
-                    usersDataMap.put("surname", surname); // Добавляем фамилию
-                    usersDataMap.put("password", password); // Добавляем пароль
-
-                    // Обновление данных в Firebase
-                    RootRef.child("Users").child(phone).updateChildren(usersDataMap)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        progressBar.setVisibility(View.GONE); // Скрыть прогресс-бар
-                                        Toast.makeText(RegistorActivity.this, "Регистрация прошла успешно.", Toast.LENGTH_SHORT).show();
-
-                                        // Переход на экран входа
-                                        Intent loginIntent = new Intent(RegistorActivity.this, ExitActivity.class);
-                                        startActivity(loginIntent);
-                                    } else {
-                                        Toast.makeText(RegistorActivity.this, "Ошибка", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                } else {
-                    // Если номер телефона уже зарегистрирован
+        rootRef.child("Users").child(phone).setValue(usersDataMap)
+                .addOnCompleteListener(task -> {
                     progressBar.setVisibility(View.GONE);
-                    Toast.makeText(RegistorActivity.this, "Номер " + phone + " уже зарегистрирован", Toast.LENGTH_SHORT).show();
-                    Intent ExitIntent = new Intent(RegistorActivity.this, ExitActivity.class);
-                    startActivity(ExitIntent); // Переход на экран входа
-                }
-            }
+                    if (task.isSuccessful()) {
+                        showToast("Регистрация прошла успешно.");
+                        Intent loginIntent = new Intent(RegistorActivity.this, ExitActivity.class);
+                        startActivity(loginIntent);
+                    } else {
+                        showToast("Ошибка при сохранении данных: " + task.getException().getMessage());
+                    }
+                });
+    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Обработка ошибок
-            }
-        });
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

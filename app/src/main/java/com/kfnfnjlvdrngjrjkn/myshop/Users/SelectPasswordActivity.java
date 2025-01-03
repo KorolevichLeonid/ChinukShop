@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.kfnfnjlvdrngjrjkn.myshop.R;
 import com.kfnfnjlvdrngjrjkn.myshop.UI.ExitActivity;
 
@@ -28,28 +29,42 @@ public class SelectPasswordActivity extends AppCompatActivity {
         resetPasswordButton = findViewById(R.id.reset_password_button);
         mAuth = FirebaseAuth.getInstance();
 
-        // Получение данных из интента
-        if (getIntent() != null && getIntent().getData() != null) {
-            Uri data = getIntent().getData();
-            String fullUrl = data.toString();
-            Log.d("SelectPasswordActivity", "Full URL: " + fullUrl);
-
-            String mode = data.getQueryParameter("mode");
-            actionCode = data.getQueryParameter("oobCode");
-
-            Log.d("SelectPasswordActivity", "Mode: " + mode);
-            Log.d("SelectPasswordActivity", "oobCode: " + actionCode);
-
-            if (TextUtils.isEmpty(actionCode) || !TextUtils.equals(mode, "resetPassword")) {
-                Toast.makeText(this, "Ошибка: неверные параметры ссылки", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        } else {
-            Toast.makeText(this, "Ошибка: отсутствует код действия", Toast.LENGTH_SHORT).show();
-            finish();
-        }
+        // Получение данных из ссылки
+        handleDynamicLink();
 
         resetPasswordButton.setOnClickListener(v -> resetPassword());
+    }
+
+    private void handleDynamicLink() {
+        FirebaseDynamicLinks.getInstance()
+                .getDynamicLink(getIntent())
+                .addOnSuccessListener(this, pendingDynamicLinkData -> {
+                    Uri deepLink = null;
+                    if (pendingDynamicLinkData != null) {
+                        deepLink = pendingDynamicLinkData.getLink();
+                    }
+
+                    if (deepLink != null) {
+                        String fullUrl = deepLink.toString();
+                        Log.d("SelectPasswordActivity", "Full URL: " + fullUrl);
+
+                        String mode = deepLink.getQueryParameter("mode");
+                        actionCode = deepLink.getQueryParameter("oobCode");
+
+                        Log.d("SelectPasswordActivity", "Mode: " + mode);
+                        Log.d("SelectPasswordActivity", "oobCode: " + actionCode);
+
+                        if (TextUtils.isEmpty(actionCode) || !TextUtils.equals(mode, "resetPassword")) {
+                            showErrorAndFinish("Ошибка: неверные параметры ссылки");
+                        }
+                    } else {
+                        showErrorAndFinish("Ошибка: отсутствует код действия");
+                    }
+                })
+                .addOnFailureListener(this, e -> {
+                    Log.w("SelectPasswordActivity", "getDynamicLink:onFailure", e);
+                    showErrorAndFinish("Ошибка при получении ссылки");
+                });
     }
 
     private void resetPassword() {
@@ -85,4 +100,8 @@ public class SelectPasswordActivity extends AppCompatActivity {
                 });
     }
 
+    private void showErrorAndFinish(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        finish();
+    }
 }
