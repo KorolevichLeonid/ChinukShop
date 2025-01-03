@@ -13,6 +13,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.kfnfnjlvdrngjrjkn.myshop.R;
+import com.kfnfnjlvdrngjrjkn.myshop.UI.ExitActivity;
 import com.kfnfnjlvdrngjrjkn.myshop.Users.HomeActivity;
 
 public class AdminCategoryActivity extends AppCompatActivity {
@@ -59,7 +60,7 @@ public class AdminCategoryActivity extends AppCompatActivity {
         button_home.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentE = new Intent(AdminCategoryActivity.this, HomeActivity.class);
+                Intent intentE = new Intent(AdminCategoryActivity.this, ExitActivity.class);
                 startActivity(intentE);
             }
         }));
